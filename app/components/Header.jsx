@@ -7,6 +7,7 @@ const Header = () => {
     <div className='flex justify-between items-center p-3 max-w-6xl mx-auto'>
       <ul className='flex gap-4'>
         <SignedIn>
+         
           <UserButton/>
         </SignedIn>
         <SignedOut>
