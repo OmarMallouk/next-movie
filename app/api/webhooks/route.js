@@ -54,7 +54,12 @@ export async function POST(req) {
 
   if (eventType === 'user.created'){
     console.log('User created event');
-    
+  }
+  if (eventType === 'user.updated'){
+    console.log('User updated event');
+  }
+  if (eventType === 'user.deleted'){
+    console.log('User deleted event');
   }
 
   return new Response('Webhook received', { status: 200 })
