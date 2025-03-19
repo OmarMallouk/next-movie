@@ -55,7 +55,8 @@ export async function POST(req) {
   console.log('Webhook payload:', body);
 
   if (eventType === 'user.created' || eventType === 'user.updated') {
-    const { first_name, last_name, image_url, email_address } = evt?.data;
+    const { first_name, last_name, image_url, email_addresses } = evt?.data;
+    const email_address = email_addresses?.[0]?.email_address;
     try {
       console.log("Processing event:", eventType, "for user:", id);
       if (!email_address) {
