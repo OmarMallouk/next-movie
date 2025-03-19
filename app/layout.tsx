@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
+import Navbar from "./components/Navbar";
+import React from "react";
 import { ClerkProvider } from "@clerk/nextjs";
 
 const geistSans = Geist({
@@ -31,6 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header/>
+        <Navbar/>
         {children}
       </body>
     </html>
