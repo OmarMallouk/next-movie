@@ -11,7 +11,12 @@ export const createUserOrUpdate = async (
     try {
         await connect();
         console.log("Saving to MongoDB:", { id, first_name, last_name, image_url, email_address });
-        const email = email_address?.[0]?.email_address || "default@hotmail.com";
+
+        // Check if email_address is provided and valid
+        const email = email_address && email_address[0] && email_address[0].email_address 
+            ? email_address[0].email_address 
+            : "default@hotmail.com"; // Fallback to default email if none is provided
+
         const user = await User.findOneAndUpdate(
             { clerkId: id }, // Use `findOneAndUpdate` instead of `findByIdAndUpdate`
             {
@@ -19,7 +24,7 @@ export const createUserOrUpdate = async (
                     firstName: first_name,
                     lastName: last_name,
                     profilePicture: image_url,
-                    email: email, // Remove `[0].email_address`
+                    email: email, // Use the validated email
                 },
             },
             {
@@ -27,6 +32,7 @@ export const createUserOrUpdate = async (
                 new: true, // Returns the updated document
             }
         );
+
         console.log("MongoDB Save Success:", user);
         return user;
     } catch (err) {
@@ -35,13 +41,11 @@ export const createUserOrUpdate = async (
     }
 };
 
-
 export const deleteUser = async (id) => {
     try {
         await connect();
-        await User.findOneAndDelete({clerkId: id});
-    }
-    catch (err) {
+        await User.findOneAndDelete({ clerkId: id });
+    } catch (err) {
         console.log("Error: cannot delete user", err);
         throw err;
     }
