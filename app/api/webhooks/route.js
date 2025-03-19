@@ -56,14 +56,21 @@ export async function POST(req) {
 
   if (eventType === 'user.created' || eventType === 'user.updated') {
     const { first_name, last_name, image_url, email_addresses } = evt?.data;
+  
+    console.log('Received email_addresses:', email_addresses);  // Log the entire email_addresses array
+  
     const email_address = email_addresses?.[0]?.email_address;
+  
+    console.log('Extracted email address:', email_address);  // Log the extracted email address
+  
     try {
       console.log("Processing event:", eventType, "for user:", id);
       if (!email_address) {
         console.log("Error: No email address provided for user", evt?.data);
         return new Response('Error: No email address provided', { status: 400 });
-    }
-
+      }
+  
+      console.log("Email address extracted:", email_address);  // Log the email address again for debugging
       const user = await createUserOrUpdate(id, first_name, last_name, image_url, email_address);
       if (user && eventType === 'user.created') {
         
