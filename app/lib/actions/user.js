@@ -11,6 +11,7 @@ export const createUserOrUpdate = async (
     try {
         await connect();
         console.log("Saving to MongoDB:", { id, first_name, last_name, image_url, email_address });
+        const email = email_address?.[0]?.email_address || "default@hotmail.com";
         const user = await User.findOneAndUpdate(
             { clerkId: id }, // Use `findOneAndUpdate` instead of `findByIdAndUpdate`
             {
@@ -18,7 +19,7 @@ export const createUserOrUpdate = async (
                     firstName: first_name,
                     lastName: last_name,
                     profilePicture: image_url,
-                    email: email_address, // Remove `[0].email_address`
+                    email: email, // Remove `[0].email_address`
                 },
             },
             {

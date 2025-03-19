@@ -58,6 +58,10 @@ export async function POST(req) {
     const { first_name, last_name, image_url, email_address } = evt?.data;
     try {
       console.log("Processing event:", eventType, "for user:", id);
+      if (!email_address) {
+        console.log("Error: No email address provided for user", evt?.data);
+        return new Response('Error: No email address provided', { status: 400 });
+    }
 
       const user = await createUserOrUpdate(id, first_name, last_name, image_url, email_address);
       if (user && eventType === 'user.created') {
