@@ -6,38 +6,37 @@ export const createUserOrUpdate = async (
     first_name,
     last_name,
     image_url,
-    email_address,
+    email_address
 ) => {
     try {
         await connect();
-        const user = await User.findByIdAndUpdate({clerkId: id}, {
-            $set: {
-                firstName: first_name,
-                lastName: last_name,
-                profilePicture: image_url,
-                email: email_address[0].email_address,
+        const user = await User.findOneAndUpdate(
+            { clerkId: id }, // Use `findOneAndUpdate` instead of `findByIdAndUpdate`
+            {
+                $set: {
+                    firstName: first_name,
+                    lastName: last_name,
+                    profilePicture: image_url,
+                    email: email_address, // Remove `[0].email_address`
+                },
             },
-            clerkId: id,
-            firstName: first_name,
-            lastName: last_name,
-            profilePicture: image_url,
-            email: email_address,
-        },
-        {
-            upsert: true,
-            new: true,
-        });
+            {
+                upsert: true, // Creates a new user if not found
+                new: true, // Returns the updated document
+            }
+        );
         return user;
     } catch (err) {
-        console.log("Error: cannot create of update user", err);
+        console.log("Error: cannot create or update user", err);
         throw err;
     }
-}
+};
+
 
 export const deleteUser = async (id) => {
     try {
         await connect();
-        await User.findOneAndDelete({clerk: id});
+        await User.findOneAndDelete({clerkId: id});
     }
     catch (err) {
         console.log("Error: cannot delete user", err);
