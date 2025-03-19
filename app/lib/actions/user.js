@@ -10,6 +10,7 @@ export const createUserOrUpdate = async (
 ) => {
     try {
         await connect();
+        console.log("Saving to MongoDB:", { id, first_name, last_name, image_url, email_address });
         const user = await User.findOneAndUpdate(
             { clerkId: id }, // Use `findOneAndUpdate` instead of `findByIdAndUpdate`
             {
@@ -25,6 +26,7 @@ export const createUserOrUpdate = async (
                 new: true, // Returns the updated document
             }
         );
+        console.log("MongoDB Save Success:", user);
         return user;
     } catch (err) {
         console.log("Error: cannot create or update user", err);
