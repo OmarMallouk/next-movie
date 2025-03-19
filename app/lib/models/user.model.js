@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import { unique } from "next/dist/build/utils";
-import { title } from "process";
+
 
 const favoriteSchema = new mongoose.Schema({
     movieId: {
@@ -52,10 +51,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    favs: [favoriteSchema],
-    default: [],
-});
-{timestamps: true};
+    favs: {
+    type: [favoriteSchema],
+    default: []
+    },
+},{timestamps: true});
+
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 export default User;

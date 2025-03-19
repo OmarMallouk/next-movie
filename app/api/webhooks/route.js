@@ -1,5 +1,7 @@
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
+import { createUserOrUpdate, deleteUser } from '../../lib/actions/user'
+import { clerkClient } from '@clerk/nextjs/server'
 
 
 export async function POST(req) {
@@ -47,18 +49,46 @@ export async function POST(req) {
 
   // Do something with payload
   // For this guide, log payload to console
-  const { id } = evt.data
-  const eventType = evt.type
+  const { id } = evt.data;
+  const eventType = evt?.type;
   console.log(`Received webhook with ID ${id} and event type of ${eventType}`)
   console.log('Webhook payload:', body);
 
-  if (eventType === 'user.created'){
-    console.log('User created event');
+  if (eventType === 'user.created' || eventType === 'user.updated') {
+    const { first_name, last_name, image_url, email_address } = evt?.data;
+    try {
+      const user = await createUserOrUpdate(id, first_name, last_name, image_url, email_address);
+      if (user && eventType === 'user.created') {
+        try {
+          await clerkClient.users.updateUserMetadata(id, {
+            publicMetadata: {
+              userMongoId: user._id,
+            },
+          });
+        } catch (error) {
+          console.log('Error: cannot update user metadata', error);
+        }
+        console.log('User created event');
+      }
+    } catch (error) {
+      console.log('Error: cannot create or update user', error);
+      return new Response('Error: cannot create or update user', { status: 400 });
+    }
   }
-  if (eventType === 'user.updated'){
-    console.log('User updated event');
-  }
+  
+
+
+
   if (eventType === 'user.deleted'){
+    try{
+      await deleteUser(id);
+
+    }catch(error){
+      console.log('Error: cannot delete user', error);
+      return new Response('Error: cannot delete user', {
+        status: 400,
+      });
+    }
     console.log('User deleted event');
   }
 
