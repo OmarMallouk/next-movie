@@ -6,7 +6,7 @@ import Movies from '../../lib/models/movies.model';
 export async function GET(req) {
   await connect();
   const url = new URL(req.url);
-  const id = url.searchParams.get('id'); // Get the movie ID from the query parameter
+  // const id = url.searchParams.get('id'); 
   const searchQuery = url.searchParams.get('search') || '';
   const genreFilter = url.searchParams.get('genre') || '';
 

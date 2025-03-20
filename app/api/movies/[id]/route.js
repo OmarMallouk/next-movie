@@ -1,6 +1,4 @@
 // File: /app/api/movies/[id]/route.js
-
-import { connect } from '../../../lib/mongodb/mongoose';
 import Movies from '../../../lib/models/movies.model';
 
 
