@@ -63,12 +63,14 @@ const fetchMovies = async (url) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {movies.map((movie) => (
           <div key={movie._id} className="border p-4 rounded-lg shadow-lg">
+            <Link href={`/movie/${movie._id}`}>
             <h3 className="font-bold">{movie.title}</h3>
             <p>{movie.genre.join(', ')}</p>
             <p>{movie.releaseDate}</p>
             <p>{movie.rating}</p>
             <p>{movie.description}</p>
             <img src={movie.imageUrl} alt={movie.title} className="w-full h-auto" />
+            </Link>
           </div>
         ))}
       </div>

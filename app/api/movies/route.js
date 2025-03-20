@@ -6,10 +6,20 @@ import Movies from '../../lib/models/movies.model';
 export async function GET(req) {
   await connect();
   const url = new URL(req.url);
+  const id = url.searchParams.get('id'); // Get the movie ID from the query parameter
   const searchQuery = url.searchParams.get('search') || '';
   const genreFilter = url.searchParams.get('genre') || '';
 
   try {
+    // if (id) {
+    //   // Fetch a single movie if the `id` is provided
+    //   const movie = await Movies.findById(id);
+    //   if (movie) {
+    //     return NextResponse.json(movie, { status: 200 });
+    //   } else {
+    //     return NextResponse.json({ message: 'Movie not found' }, { status: 404 });
+    //   }
+    // }
 
     const filter = {};
 
@@ -17,7 +27,6 @@ export async function GET(req) {
       filter.title = { $regex: searchQuery, $options: 'i' }; // Case-insensitive search
     }
 
-    // Add genre filter if present
     if (genreFilter) {
       filter.genre = { $in: [genreFilter] }; // Match genre
     }
@@ -54,3 +63,4 @@ export async function POST(req) {
     return NextResponse.json({ message: 'Error adding movie', error }, { status: 500 });
   }
 }
+
