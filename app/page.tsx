@@ -11,7 +11,12 @@ interface Movie {
 }
 
 async function getMovies(): Promise<Movie[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/movies`, {
+  console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
+
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+  console.log("Fetching from:", `${BASE_URL}/api/movies`); 
+
+  const res = await fetch(`${BASE_URL}/api/movies`, {
     cache: "no-store", // Ensures fresh data
   });
   if (!res.ok) throw new Error("Failed to fetch movies");
